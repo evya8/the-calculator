@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+
+
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <div class="card" style="width:14rem;">
+            <div class="p-3 mb-2 bg-secondary-subtle text-emphasis-secondary" class="card-body">
+                <h5 class="card-title">Calculator</h5>
+
+                <input id="res">
+
+                <div class="row row-cols-4 g-0 mb-1 mt-2">
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-danger" onclick="oper('clearDisplay')">C</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-info" onclick="memoryToggle()">M</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary" onclick="oper('power')">^</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary" onclick="oper('root')">√</button>
+                    </div>
+                </div>
+
+                <div class="row row-cols-4 g-0 mb-1">
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(7)">7</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(8)">8</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(9)">9</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary" onclick="oper('divided')">÷</button>
+                    </div>
+                </div>
+
+
+                <div class="row row-cols-4 g-0  mb-1">
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(4)">4</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(5)">5</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(6)">6</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary" onclick="oper('multiply')">X</button>
+                    </div>
+                </div>
+
+
+                <div class="row row-cols-4 g-0 mb-1">
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(1)">1</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(2)">2</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(3)">3</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary" onclick="oper('minus')">-</button>
+                    </div>
+                </div>
+
+
+                <div class="row row-cols-4 g-0 mb-0">
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit(0)">0</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-dark" onclick="addDigit('.')">.</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-success" onclick="calculate()">=</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary" onclick="oper('plus')">+</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <script>
+            let clearFlag = false;
+            let num1 = 0;
+            let lastOper = "";
+            let memory = null
+
+            function addDigit(digit) {
+                if (clearFlag) {
+                    res.value = "";
+                    clearFlag = false;
+                }
+                res.value += digit;
+            }
+            function clearDisplay() {
+                res.value = "";
+                clearFlag = false;
+                num1 = 0;
+                lastOper = "";
+            }
+            function oper(op) {
+                if (op === 'clearDisplay') {
+                    clearDisplay();
+                } else {
+                    clearFlag = true;
+                    num1 = parseFloat(res.value);
+                    lastOper = op;
+                }
+            }
+
+            function memoryToggle() {
+                if (memory === null) {
+                    // If memory is empty, store the current value
+                    memory = parseFloat(res.value);
+                    clearDisplay();
+                } else {
+                    // If memory has a value, recall it
+                    res.value = memory;
+                    memory = null
+                }
+            }
+
+
+            function calculate() {
+                let num2 = parseFloat(res.value);
+                let result;
+
+                switch (lastOper) {
+                    case 'plus':
+                        result = num1 + num2;
+                        break;
+                    case 'minus':
+                        result = num1 - num2;
+                        break;
+                    case 'multiply':
+                        result = num1 * num2;
+                        break;
+                    case 'divided':
+                        result = num1 / num2;
+                        break;
+                    case 'power':
+                        result = Math.pow(num1, num2);
+                        break;
+                    case 'root':
+                        result = Math.sqrt(num1);
+                        break;
+                    default:
+                        result = num2; // Default to the current value if no operation selected
+                        break;
+                }
+
+                res.value = result;
+                clearFlag = true;
+            }
+        </script>
+
+
+
+
+</body>
+
+</html>
